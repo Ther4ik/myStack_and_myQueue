@@ -2,7 +2,7 @@
 #define ROOTEDTREE_H
 
 #include <vector>
-#include <iostream>
+#include <stdexcept>
 #include "myQueue.h"
 
 class rootedTree
@@ -11,37 +11,52 @@ public:
 	using adjacencyLists = std::vector<std::vector<int>>;
 
 private:
-	int _rootNode = -1;           // коренвая вершина
+	int _rootNode = -1;           // кореневая вершина
 	std::vector<int> _parents;    // родители
-	std::vector<int> _child;      // дети 
-	adjacencyLists _graf;         // списки смежности для корневого дерева 0: 1,2,3 ; 1:4,5,6 и т.д. Первый элемент - номер вершина, а после идут смежные вершины с ней 
+	std::vector<int> _distance;   // расстояние от корня вершины. _distance[0] - расстояние от корня до точки 0 и т.д.
+	adjacencyLists _graf;         // списки смежности для корневого дерева. graf[v] — только соседи вершины v
 	
 public:
 
-	void BFS(const adjacencyLists& graf, int rootNode)            //передаю список смежности, граф, который мы исследуем  
+
+	void BFS(const adjacencyLists& graf, int rootNode)     //передаю список смежности, граф, который мы исследуем  
 	{
+		int countVertex = static_cast<int>(graf.size());
+		if (rootNode < 0 || rootNode >= countVertex)
+			throw std::out_of_range("BFS: root node is out of range");
+
+		_graf = graf;                                      //используем оператор копирования, чтобы выделить память и ячейки для написания списка смежности для корневого графа
 		_rootNode = rootNode;
-		size_t countVertex = graf.size(); 
+		_distance.assign(countVertex, -1);                 // значение -1 - вершина не посещенная или недостижима
+		_parents.assign(countVertex, -1);
+
 		myQueue<int> Q;                                    //очередь для работы с графом
-		std::vector<bool> order(countVertex, false);       //изначально все вершины не посещенный
 		Q.push(_rootNode);
-		order[_rootNode] = true;
+		_parents[_rootNode] = _rootNode;
+		_distance[_rootNode] = 0;
 
 		while (!Q.empty())
 		{
 			int current = Q.front();
 			Q.pop();
-			for (int i = 0; i < graf[current].size(); i++)
+
+			for (int neighbor: graf[current])
 			{
-				int neighbor = graf[current][i];
-				if (!order[neighbor])
+				if (neighbor < 0 || neighbor >= countVertex)                               //проверка, что в списках смежности нет некоторых точек, чтобы не сломать работу программы 
+					throw std::out_of_range("BFS: neighbor is out of range");              
+
+				if (_distance[neighbor] == -1)
 				{
-					order[neighbor] = true;
+					_distance[neighbor] = _distance[current] + 1;
+					_parents[neighbor] = current;
 					Q.push(neighbor);
 				}
 			}
+
 		}
 	}
+
+
 
 
 };
