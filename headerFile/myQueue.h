@@ -1,5 +1,5 @@
-#ifndef QUEUE_H
-#define QUEUE_H
+#ifndef MYQUEUE_H
+#define MYQUEUE_H
 
 #include <deque>
 #include <cstddef>
@@ -65,4 +65,4 @@ public:
 	}
 };
 
-#endif // QUEUE_H
+#endif // MYQUEUE_H
