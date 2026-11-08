@@ -18,15 +18,23 @@ private:
 	
 public:
 
+	rootedTree(const adjacencyLists& graf, int root): _rootNode(root), _graf(graf)
+	{
+		int countVertex = static_cast<int>(_graf.size());
 
-	void BFS(const adjacencyLists& graf, int rootNode)     //передаю список смежности, граф, который мы исследуем  
+		if (root < 0 || root >= countVertex)
+			throw std::out_of_range("rootedTree: root node is out of range");
+
+		for (const auto& neighbors : _graf)
+			for (int j : neighbors)
+				if (j < 0 || j >= countVertex)
+					throw std::out_of_range("rootedTree: neighbor is out of range");
+	}
+
+	void BFS()     
 	{
 		int countVertex = static_cast<int>(graf.size());
-		if (rootNode < 0 || rootNode >= countVertex)
-			throw std::out_of_range("BFS: root node is out of range");
-
-		_graf = graf;                                      //используем оператор копирования, чтобы выделить память и ячейки для написания списка смежности для корневого графа
-		_rootNode = rootNode;
+	
 		_distance.assign(countVertex, -1);                 // значение -1 - вершина не посещенная или недостижима
 		_parents.assign(countVertex, -1);
 
@@ -42,9 +50,6 @@ public:
 
 			for (int neighbor: graf[current])
 			{
-				if (neighbor < 0 || neighbor >= countVertex)                               //проверка, что в списках смежности нет некоторых точек, чтобы не сломать работу программы 
-					throw std::out_of_range("BFS: neighbor is out of range");              
-
 				if (_distance[neighbor] == -1)
 				{
 					_distance[neighbor] = _distance[current] + 1;
