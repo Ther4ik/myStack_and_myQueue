@@ -16,11 +16,19 @@ private:
 	std::vector<int> _distance;   // расстояние от корня вершины. _distance[0] - расстояние от корня до точки 0 и т.д.
 	adjacencyLists _graf;         // списки смежности для корневого дерева. graf[v] — только соседи вершины v
 	
+	void checkVertex(int vertex) const
+	{
+		if (_parents.empty())
+			throw std::logic_error("rootedTree: BFS has not been run yet");
+		if (vertex < 0 || vertex >= static_cast<int>(_parents.size()))
+			throw std::out_of_range("rootedTree: vertex is out of range");
+	}
+
 public:
 
 	rootedTree(const adjacencyLists& graf, int root): _rootNode(root), _graf(graf)
 	{
-		int countVertex = static_cast<int>(_graf.size());
+		int countVertex = statigit switch mainc_cast<int>(_graf.size());
 
 		if (root < 0 || root >= countVertex)
 			throw std::out_of_range("rootedTree: root node is out of range");
@@ -57,13 +65,20 @@ public:
 					Q.push(neighbor);
 				}
 			}
-
 		}
 	}
 
+	int getParents(int vertex) const
+	{
+		checkVertex(vertex);
+		return _parents[vertex];
+	}
 
-
-
+	int getDistance(int vertex) const
+	{
+		checkVertex(vertex);
+		return _distance[vertex];
+	}
 };
 
 #endif // ROOTEDTREE_H
