@@ -72,7 +72,7 @@ TEST(MyStackTest, WorksWithStrings)
     s.push("hello");
     s.push("world");
 
-    EXPECT_EQ(q.top(), "world");
+    EXPECT_EQ(s.top(), "world");
     s.pop();
     EXPECT_EQ(s.top(), "hello");
 }

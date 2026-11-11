@@ -7,6 +7,7 @@ add_subdirectory(${PROJECT_SOURCE_DIR}/third_party/googletest
 
 add_executable(run_tests
   stack_tests.cpp
+  queue_tests.cpp
 )
 
 target_link_libraries(run_tests PRIVATE containers GTest::gtest_main)
