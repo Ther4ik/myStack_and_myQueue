@@ -11,6 +11,7 @@ class rootedTree
 {
 public:
 	using adjacencyLists = std::vector<std::vector<int>>;
+	enum class SearchMethod { BFS, DFS };
 
 private:
 	int _rootNode = -1;           // корневая вершина
@@ -39,6 +40,14 @@ public:
 			for (int j : neighbors)
 				if (j < 0 || j >= countVertex)
 					throw std::out_of_range("rootedTree: neighbor is out of range");
+	}
+
+	rootedTree(const adjacencyLists& graf, int root, SearchMethod method): rootedTree(graf, root)     
+	{	
+		if (method == SearchMethod::BFS)
+			BFS();
+		else
+			DFS();
 	}
 
 	void BFS()     
